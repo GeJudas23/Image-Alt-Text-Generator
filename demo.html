@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Image Alt Text Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+        }
+
+        .stats-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .image-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-info {
+            padding: 15px;
+        }
+
+        .image-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .alt-text {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #1976d2;
+            min-height: 60px;
+            word-wrap: break-word;
+        }
+
+        .alt-text.empty {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .alt-text.processed {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .badge-static {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-random {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1> Image Alt Text Generator - Demo</h1>
+            <p class="subtitle">Демонстрация автоматической генерации alt текста для изображений</p>
+        </header>
+
+
+        <!-- Static Images Section -->
+        <div class="section">
+            <h2>Статические изображения (5 шт.)</h2>
+            <p style="color: #666; margin-bottom: 15px;">Эти изображения имеют фиксированные URL и всегда одинаковые</p>
+            <div class="image-grid">
+                <div class="image-card">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop" alt="" data-index="0">
+                    <div class="image-info">
+                        <span class="badge badge-static">STATIC #1</span>
+                        <div class="image-title">Горный пейзаж</div>
+                        <div class="alt-text empty" data-for="0">⏳ Ожидание обработки...</div>
+                    </div>
+                </div>
+
+                <div class="image-card">
+                    <img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400&h=300&fit=crop" alt="" data-index="1">
+                    <div class="image-info">
+                        <span class="badge badge-static">STATIC #2</span>
+                        <div class="image-title">Кот</div>
+                        <div class="alt-text empty" data-for="1">⏳ Ожидание обработки...</div>
+                    </div>
+                </div>
+
+                <div class="image-card">
+                    <img src="https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=400&h=300&fit=crop" alt="" data-index="2">
+                    <div class="image-info">
+                        <span class="badge badge-static">STATIC #3</span>
+                        <div class="image-title">Космос</div>
+                        <div class="alt-text empty" data-for="2">⏳ Ожидание обработки...</div>
+                    </div>
+                </div>
+
+                <div class="image-card">
+                    <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=400&h=300&fit=crop" alt="" data-index="3">
+                    <div class="image-info">
+                        <span class="badge badge-static">STATIC #4</span>
+                        <div class="image-title">Гамбургер</div>
+                        <div class="alt-text empty" data-for="3">⏳ Ожидание обработки...</div>
+                    </div>
+                </div>
+
+                <div class="image-card">
+                    <img src="https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=400&h=300&fit=crop" alt="" data-index="4">
+                    <div class="image-info">
+                        <span class="badge badge-static">STATIC #5</span>
+                        <div class="image-title">Ноутбук на столе</div>
+                        <div class="alt-text empty" data-for="4">⏳ Ожидание обработки...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Random Images Section -->
+        <div class="section">
+            <h2>Случайные изображения (5 шт.)</h2>
+            <p style="color: #666; margin-bottom: 15px;">Эти изображения загружаются случайным образом из Lorem Picsum</p>
+            <div class="image-grid">
+                <div class="image-card">
+                    <img src="https://picsum.photos/400/300?random=1" alt="" data-index="5">
+                    <div class="image-info">
+                        <span class="badge badge-random">RANDOM #1</span>
+                        <div class="image-title">Случайное фото 1</div>
+                        <div class="alt-text empty" data-for="5">⏳ Ожидание обработки...</div>
+                    </div>
+                </div>
+
+                <div class="image-card">
+                    <img src="https://picsum.photos/400/300?random=2" alt="" data-index="6">
+                    <div class="image-info">
+                        <span class="badge badge-random">RANDOM #2</span>
+                        <div class="image-title">Случайное фото 2</div>
+                        <div class="alt-text empty" data-for="6">⏳ Ожидание обработки...</div>
+                    </div>
+                </div>
+
+                <div class="image-card">
+                    <img src="https://picsum.photos/400/300?random=3" alt="" data-index="7">
+                    <div class="image-info">
+                        <span class="badge badge-random">RANDOM #3</span>
+                        <div class="image-title">Случайное фото 3</div>
+                        <div class="alt-text empty" data-for="7">⏳ Ожидание обработки...</div>
+                    </div>
+                </div>
+
+                <div class="image-card">
+                    <img src="https://picsum.photos/400/300?random=4" alt="" data-index="8">
+                    <div class="image-info">
+                        <span class="badge badge-random">RANDOM #4</span>
+                        <div class="image-title">Случайное фото 4</div>
+                        <div class="alt-text empty" data-for="8">⏳ Ожидание обработки...</div>
+                    </div>
+                </div>
+
+                <div class="image-card">
+                    <img src="https://picsum.photos/400/300?random=5" alt="" data-index="9">
+                    <div class="image-info">
+                        <span class="badge badge-random">RANDOM #5</span>
+                        <div class="image-title">Случайное фото 5</div>
+                        <div class="alt-text empty" data-for="9">⏳ Ожидание обработки...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update alt text displays in real-time
+        function updateAltDisplays() {
+            document.querySelectorAll('img[data-index]').forEach((img, index) => {
+                const display = document.querySelector(`.alt-text[data-for="${img.dataset.index}"]`);
+                if (display && img.alt) {
+                    if (img.alt === '') {
+                        display.textContent = '⏳ Ожидание обработки...';
+                        display.className = 'alt-text empty';
+                    } else {
+                        display.textContent = `✅ ${img.alt}`;
+                        display.className = 'alt-text processed';
+                    }
+                }
+            });
+        }
+
+        // Update statistics
+        function updateStats() {
+            if (typeof window.imageAltExtension !== 'undefined') {
+                const trackerStats = window.imageAltExtension.getTrackerStats();
+                const apiStats = window.imageAltExtension.getAPIStats();
+
+                document.getElementById('stat-processed').textContent = trackerStats.processedCount;
+                document.getElementById('stat-inflight').textContent = trackerStats.inFlightCount;
+                document.getElementById('stat-success').textContent = apiStats.success;
+                document.getElementById('stat-failed').textContent = apiStats.failed;
+
+                console.log('📊 Statistics updated:', { trackerStats, apiStats });
+            } else {
+                console.warn('⚠️ Extension not detected');
+                document.getElementById('stat-processed').textContent = '?';
+                document.getElementById('stat-inflight').textContent = '?';
+                document.getElementById('stat-success').textContent = '?';
+                document.getElementById('stat-failed').textContent = '?';
+            }
+        }
+
+        // Reprocess all images
+        function reprocessAll() {
+            if (typeof window.imageAltExtension !== 'undefined') {
+                window.imageAltExtension.processAllImages();
+                console.log('🔁 Reprocessing all images...');
+                setTimeout(updateStats, 2000);
+            } else {
+                alert('⚠️ Extension not detected!');
+            }
+        }
+
+        // Clear and restart
+        function clearAndRestart() {
+            if (typeof window.imageAltExtension !== 'undefined') {
+                window.imageAltExtension.cleanup();
+                setTimeout(() => {
+                    window.imageAltExtension.reinitialize();
+                    console.log('🗑️ Extension cleared and restarted');
+                    setTimeout(updateStats, 2000);
+                }, 500);
+            } else {
+                alert('⚠️ Extension not detected!');
+            }
+        }
+
+        // Auto-update displays and stats
+        setInterval(updateAltDisplays, 1000);
+        setInterval(updateStats, 3000);
+
+        // Initial update
+        setTimeout(() => {
+            updateStats();
+            updateAltDisplays();
+        }, 2000);
+
+        console.log('🖼️ Demo page loaded. Extension should process images automatically.');
+        console.log('💡 Open console and use: window.imageAltExtension.getTrackerStats()');
+    </script>
+</body>
+</html>
